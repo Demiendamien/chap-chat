@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (messageData) => {
-    console.log("📨 Message reçu:", messageData);
+    console.log(" Message reçu:", messageData);
     io.emit("receiveMessage", messageData);
   });
 });
