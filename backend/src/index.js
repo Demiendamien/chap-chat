@@ -89,13 +89,17 @@ app.use("/api/messages", messageRoutes);
 
 // 🔹 Production static files (Vite build)
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(_dirname, '/frontend/dist')));
+  const distPath = path.join(_dirname, '/frontend/dist');
+  app.use(express.static(distPath));
 
-  // Remplacer * par /* pour path-to-regexp
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(_dirname, 'frontend', 'dist', 'index.html'));
+  // ✅ middleware global au lieu d'un app.get('*')
+  app.use((req, res, next) => {
+    res.sendFile(path.join(distPath, 'index.html'), (err) => {
+      if (err) next(err);
+    });
   });
 }
+
 
 // 🔹 Démarrage serveur et connexion DB
 server.listen(PORT, () => {
